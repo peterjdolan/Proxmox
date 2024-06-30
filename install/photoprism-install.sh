@@ -13,6 +13,17 @@ setting_up_container
 network_check
 update_os
 
+msg_info "Setting Up Hardware Acceleration"
+$STD apt-get -y install {va-driver-all,ocl-icd-libopencl1,intel-opencl-icd,vainfo,intel-gpu-tools}
+if [[ "$CTTYPE" == "0" ]]; then
+  chgrp video /dev/dri
+  chmod 755 /dev/dri
+  chmod 660 /dev/dri/*
+  $STD adduser $(id -u -n) video
+  $STD adduser $(id -u -n) render
+fi
+msg_ok "Set Up Hardware Acceleration"
+
 msg_info "Installing Dependencies (Patience)"
 $STD apt-get install -y curl
 $STD apt-get install -y sudo
